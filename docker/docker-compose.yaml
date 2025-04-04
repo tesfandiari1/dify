@@ -454,7 +454,6 @@ services:
       PLUGIN_MAX_PACKAGE_SIZE: ${PLUGIN_MAX_PACKAGE_SIZE:-52428800}
       INNER_API_KEY_FOR_PLUGIN: ${PLUGIN_DIFY_INNER_API_KEY:-QaHbTe77CtuXmsfyhR7+vRjI/+XbV1AaFy691iy+kGDv2Jvy0/eAh8Y1}
     depends_on:
-      - db
       - redis
     volumes:
       # Mount the storage directory to the container, for storing user files.
@@ -479,7 +478,6 @@ services:
       PLUGIN_MAX_PACKAGE_SIZE: ${PLUGIN_MAX_PACKAGE_SIZE:-52428800}
       INNER_API_KEY_FOR_PLUGIN: ${PLUGIN_DIFY_INNER_API_KEY:-QaHbTe77CtuXmsfyhR7+vRjI/+XbV1AaFy691iy+kGDv2Jvy0/eAh8Y1}
     depends_on:
-      - db
       - redis
     volumes:
       # Mount the storage directory to the container, for storing user files.
@@ -513,6 +511,8 @@ services:
   db:
     image: postgres:15-alpine
     restart: always
+    profiles:
+      - local-db
     environment:
       PGUSER: ${PGUSER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-difyai123456}
@@ -595,7 +595,7 @@ services:
     volumes:
       - ./volumes/plugin_daemon:/app/storage
     depends_on:
-      - db
+      - api
 
   # ssrf_proxy server
   # for more information, please refer to
